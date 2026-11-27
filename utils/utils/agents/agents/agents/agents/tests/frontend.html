@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚖️ AI Courtroom Justice System</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a1f3a;
+            --secondary: #c9a961;
+            --accent: #0f1429;
+            --light: #f8f9fa;
+        }
+
+        * {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        /* HEADER */
+        .header {
+            background: linear-gradient(180deg, rgba(26, 31, 58, 0.98) 0%, rgba(15, 20, 41, 0.98) 100%);
+            color: white;
+            padding: 50px 0;
+            border-bottom: 3px solid var(--secondary);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .header h1 {
+            font-size: 3.5em;
+            font-weight: 700;
+            color: var(--secondary);
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            color: #d0d0d0;
+            letter-spacing: 1px;
+        }
+
+        /* INPUT PANEL */
+        .input-panel {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+            margin-top: -30px;
+            margin-bottom: 50px;
+            border: 1px solid #e0e0e0;
+            position: relative;
+            z-index: 10;
+        }
+
+        .input-panel h2 {
+            font-size: 2em;
+            color: var(--primary);
+            margin-bottom: 30px;
+            font-weight: 700;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            font-size: 0.95em;
+            letter-spacing: 0.5px;
+        }
+
+        .form-control {
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 12px 15px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--secondary);
+            box-shadow: 0 0 20px rgba(201, 169, 97, 0.1);
+            background: white;
+        }
+
+        .btn-analyze {
+            background: linear-gradient(135deg, var(--secondary) 0%, #e8d4a8 100%);
+            color: var(--primary);
+            border: none;
+            padding: 14px 40px;
+            font-size: 1.1em;
+            font-weight: 700;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 10px 30px rgba(201, 169, 97, 0.2);
+            margin-top: 20px;
+        }
+
+        .btn-analyze:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(201, 169, 97, 0.3);
+            background: linear-gradient(135deg, #e8d4a8 0%, var(--secondary) 100%);
+            color: var(--primary);
+        }
+
+        .btn-analyze:disabled {
+            opacity: 0.6;
+        }
+
+        /* COURTROOM CONTAINER */
+        .courtroom {
+            background: white;
+            border-radius: 20px;
+            padding: 60px 40px;
+            box-shadow: 0 20px 70px rgba(0, 0, 0, 0.25);
+            min-height: 900px;
+        }
+
+        .courtroom-title {
+            text-align: center;
+            font-size: 2.5em;
+            color: var(--primary);
+            margin-bottom: 60px;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        /* AGENTS GRID */
+        .agents-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .agent-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            border-radius: 15px;
+            padding: 30px 20px;
+            text-align: center;
+            border-left: 5px solid;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .agent-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        .judge-card { border-left-color: #8b4513; }
+        .prosecutor-card { border-left-color: #1a3a52; }
+        .defense-card { border-left-color: #2d5016; }
+        .evidence-card { border-left-color: #6a4c93; }
+
+        .agent-icon {
+            font-size: 4em;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .agent-title {
+            font-size: 1.4em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+
+        .judge-card .agent-title { color: #8b4513; }
+        .prosecutor-card .agent-title { color: #1a3a52; }
+        .defense-card .agent-title { color: #2d5016; }
+        .evidence-card .agent-title { color: #6a4c93; }
+
+        .speech-box {
+            background: linear-gradient(135deg, #f9f9f9 0%, #f5f5f5 100%);
+            border: 2px solid #e8e8e8;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 15px;
+            font-size: 0.9em;
+            line-height: 1.7;
+            color: #2a2a2a;
+            max-height: 400px;
+            overflow-y: auto;
+            min-height: 100px;
+            opacity: 0;
+            animation: fadeIn 0.6s ease forwards;
+            text-align: left;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .speech-box::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .speech-box::-webkit-scrollbar-track {
+            background: #f0f0f0;
+            border-radius: 10px;
+        }
+
+        .speech-box::-webkit-scrollbar-thumb {
+            background: var(--secondary);
+            border-radius: 10px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 120px 40px;
+            color: #999;
+            font-size: 1.3em;
+        }
+
+        .loading-state {
+            text-align: center;
+            padding: 80px 40px;
+        }
+
+        .spinner {
+            border: 4px solid #e0e0e0;
+            border-top-color: var(--secondary);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1200px) {
+            .agents-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 25px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .agents-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .courtroom {
+                padding: 30px 20px;
+            }
+
+            .header h1 {
+                font-size: 2.2em;
+            }
+
+            .input-panel {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <div class="header">
+        <div class="container">
+            <h1>⚖️ AI COURTROOM</h1>
+            <p>Intelligent Justice & Legal Analysis System</p>
+        </div>
+    </div>
+
+    <!-- MAIN CONTAINER -->
+    <div class="container mt-5 mb-5">
+        <!-- INPUT PANEL -->
+        <div class="input-panel">
+            <h2>📋 File Your Case</h2>
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <label class="form-label">Case Details *</label>
+                    <textarea class="form-control" id="caseInput" rows="6" placeholder="Describe the case facts, evidence, and charges..."></textarea>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <label class="form-label">Defendant's Statement</label>
+                    <textarea class="form-control" id="defendantInput" rows="6" placeholder="Enter the defendant's defense position..."></textarea>
+                </div>
+            </div>
+            <button class="btn btn-analyze" onclick="analyzeCase()" id="analyzeBtn">
+                <i class="fas fa-gavel"></i> CONVENE COURT
+            </button>
+        </div>
+
+        <!-- COURTROOM -->
+        <div class="courtroom">
+            <h2 class="courtroom-title">🏛️ COURT IN SESSION</h2>
+
+            <!-- Empty State -->
+            <div id="emptyState" class="empty-state">
+                <i class="fas fa-scroll" style="font-size: 3em; color: #ddd; margin-bottom: 20px; display: block;"></i>
+                File your case to begin the trial
+            </div>
+
+            <!-- Court Content -->
+            <div id="courtContent" style="display: none;">
+                <!-- Loading State -->
+                <div id="loadingState" class="loading-state" style="display: none;">
+                    <div class="spinner"></div>
+                    <p style="font-size: 1.2em; color: var(--primary); font-weight: 600;">
+                        <i class="fas fa-hourglass-start"></i> CONVENING COURT...
+                    </p>
+                </div>
+
+                <!-- Trial Display -->
+                <div id="trialDisplay" style="display: none;">
+                    <div class="agents-grid">
+                        <!-- EVIDENCE -->
+                        <div class="agent-card evidence-card">
+                            <span class="agent-icon">🔬</span>
+                            <div class="agent-title">EVIDENCE</div>
+                            <div class="speech-box" id="evidenceSpeech"></div>
+                        </div>
+
+                        <!-- PROSECUTOR -->
+                        <div class="agent-card prosecutor-card">
+                            <span class="agent-icon">🔨</span>
+                            <div class="agent-title">PROSECUTOR</div>
+                            <div class="speech-box" id="prosecutorSpeech"></div>
+                        </div>
+
+                        <!-- DEFENSE -->
+                        <div class="agent-card defense-card">
+                            <span class="agent-icon">🛡️</span>
+                            <div class="agent-title">DEFENSE</div>
+                            <div class="speech-box" id="defenseSpeech"></div>
+                        </div>
+
+                        <!-- JUDGE -->
+                        <div class="agent-card judge-card">
+                            <span class="agent-icon">👨‍⚖️</span>
+                            <div class="agent-title">JUDGE</div>
+                            <div class="speech-box" id="judgeSpeech"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        async function analyzeCase() {
+            const caseInput = document.getElementById('caseInput').value;
+            const defendantInput = document.getElementById('defendantInput').value;
+
+            if (!caseInput.trim()) {
+                alert('Please file case details');
+                return;
+            }
+
+            const btn = document.getElementById('analyzeBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-hourglass-start"></i> COURT IN SESSION...';
+
+            document.getElementById('emptyState').style.display = 'none';
+            document.getElementById('courtContent').style.display = 'block';
+            document.getElementById('loadingState').style.display = 'block';
+            document.getElementById('trialDisplay').style.display = 'none';
+
+            try {
+                const response = await fetch('http://localhost:5000/analyze', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ case: caseInput, defendant: defendantInput })
+                });
+
+                if (!response.ok) throw new Error('Backend error');
+                const data = await response.json();
+
+                document.getElementById('loadingState').style.display = 'none';
+                document.getElementById('trialDisplay').style.display = 'block';
+
+                // Sequential speech - SHOW FULL RESPONSES
+                setTimeout(() => populateSpeech('evidenceSpeech', data.evidence), 300);
+                setTimeout(() => populateSpeech('prosecutorSpeech', data.prosecution), 1200);
+                setTimeout(() => populateSpeech('defenseSpeech', data.defense), 2100);
+                setTimeout(() => populateSpeech('judgeSpeech', data.verdict), 3000);
+
+            } catch (error) {
+                alert('Error: ' + error.message);
+                document.getElementById('loadingState').style.display = 'none';
+                document.getElementById('emptyState').style.display = 'block';
+            }
+
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-gavel"></i> CONVENE COURT';
+        }
+
+        function populateSpeech(elementId, text) {
+            const el = document.getElementById(elementId);
+            // INCREASED to 1200 characters instead of 450
+            el.textContent = text.substring(0, 1200) + (text.length > 1200 ? '...' : '');
+            el.style.opacity = '1';
+        }
+    </script>
+</body>
+</html>
