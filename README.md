@@ -1,4 +1,4 @@
-# AI Courtroom Backend
+# AI Courtroom 
 
 Multi-agent AI courtroom backend built with Flask. Four AI agents (Evidence Analyzer, Defense Attorney, Prosecutor and Judge) analyze a case using Groq (Llama 3.3 70B) and semantic search over real court cases, then deliver a verdict.
 
