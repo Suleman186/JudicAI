@@ -1,428 +1,292 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>⚖️ AI Courtroom Justice System</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #1a1f3a;
-            --secondary: #c9a961;
-            --accent: #0f1429;
-            --light: #f8f9fa;
-        }
-
-        * {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
-            min-height: 100vh;
-            color: #333;
-        }
-
-        /* HEADER */
-        .header {
-            background: linear-gradient(180deg, rgba(26, 31, 58, 0.98) 0%, rgba(15, 20, 41, 0.98) 100%);
-            color: white;
-            padding: 50px 0;
-            border-bottom: 3px solid var(--secondary);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
-        }
-
-        .header h1 {
-            font-size: 3.5em;
-            font-weight: 700;
-            color: var(--secondary);
-            letter-spacing: 2px;
-            margin-bottom: 10px;
-        }
-
-        .header p {
-            font-size: 1.1em;
-            color: #d0d0d0;
-            letter-spacing: 1px;
-        }
-
-        /* INPUT PANEL */
-        .input-panel {
-            background: white;
-            border-radius: 15px;
-            padding: 40px;
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
-            margin-top: -30px;
-            margin-bottom: 50px;
-            border: 1px solid #e0e0e0;
-            position: relative;
-            z-index: 10;
-        }
-
-        .input-panel h2 {
-            font-size: 2em;
-            color: var(--primary);
-            margin-bottom: 30px;
-            font-weight: 700;
-        }
-
-        .form-label {
-            font-weight: 600;
-            color: var(--primary);
-            margin-bottom: 12px;
-            text-transform: uppercase;
-            font-size: 0.95em;
-            letter-spacing: 0.5px;
-        }
-
-        .form-control {
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            padding: 12px 15px;
-            font-size: 1em;
-            transition: all 0.3s ease;
-        }
-
-        .form-control:focus {
-            border-color: var(--secondary);
-            box-shadow: 0 0 20px rgba(201, 169, 97, 0.1);
-            background: white;
-        }
-
-        .btn-analyze {
-            background: linear-gradient(135deg, var(--secondary) 0%, #e8d4a8 100%);
-            color: var(--primary);
-            border: none;
-            padding: 14px 40px;
-            font-size: 1.1em;
-            font-weight: 700;
-            border-radius: 10px;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 10px 30px rgba(201, 169, 97, 0.2);
-            margin-top: 20px;
-        }
-
-        .btn-analyze:hover:not(:disabled) {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(201, 169, 97, 0.3);
-            background: linear-gradient(135deg, #e8d4a8 0%, var(--secondary) 100%);
-            color: var(--primary);
-        }
-
-        .btn-analyze:disabled {
-            opacity: 0.6;
-        }
-
-        /* COURTROOM CONTAINER */
-        .courtroom {
-            background: white;
-            border-radius: 20px;
-            padding: 60px 40px;
-            box-shadow: 0 20px 70px rgba(0, 0, 0, 0.25);
-            min-height: 900px;
-        }
-
-        .courtroom-title {
-            text-align: center;
-            font-size: 2.5em;
-            color: var(--primary);
-            margin-bottom: 60px;
-            font-weight: 700;
-            letter-spacing: 2px;
-        }
-
-        /* AGENTS GRID */
-        .agents-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 30px;
-            margin-bottom: 30px;
-        }
-
-        .agent-card {
-            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-            border-radius: 15px;
-            padding: 30px 20px;
-            text-align: center;
-            border-left: 5px solid;
-            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
-            transition: all 0.3s ease;
-            animation: fadeInUp 0.6s ease;
-        }
-
-        .agent-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
-        }
-
-        .judge-card { border-left-color: #8b4513; }
-        .prosecutor-card { border-left-color: #1a3a52; }
-        .defense-card { border-left-color: #2d5016; }
-        .evidence-card { border-left-color: #6a4c93; }
-
-        .agent-icon {
-            font-size: 4em;
-            margin-bottom: 15px;
-            display: block;
-        }
-
-        .agent-title {
-            font-size: 1.4em;
-            font-weight: 700;
-            margin-bottom: 20px;
-            color: var(--primary);
-        }
-
-        .judge-card .agent-title { color: #8b4513; }
-        .prosecutor-card .agent-title { color: #1a3a52; }
-        .defense-card .agent-title { color: #2d5016; }
-        .evidence-card .agent-title { color: #6a4c93; }
-
-        .speech-box {
-            background: linear-gradient(135deg, #f9f9f9 0%, #f5f5f5 100%);
-            border: 2px solid #e8e8e8;
-            border-radius: 12px;
-            padding: 20px;
-            margin-top: 15px;
-            font-size: 0.9em;
-            line-height: 1.7;
-            color: #2a2a2a;
-            max-height: 400px;
-            overflow-y: auto;
-            min-height: 100px;
-            opacity: 0;
-            animation: fadeIn 0.6s ease forwards;
-            text-align: left;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .speech-box::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .speech-box::-webkit-scrollbar-track {
-            background: #f0f0f0;
-            border-radius: 10px;
-        }
-
-        .speech-box::-webkit-scrollbar-thumb {
-            background: var(--secondary);
-            border-radius: 10px;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 120px 40px;
-            color: #999;
-            font-size: 1.3em;
-        }
-
-        .loading-state {
-            text-align: center;
-            padding: 80px 40px;
-        }
-
-        .spinner {
-            border: 4px solid #e0e0e0;
-            border-top-color: var(--secondary);
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* RESPONSIVE */
-        @media (max-width: 1200px) {
-            .agents-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 25px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .agents-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .courtroom {
-                padding: 30px 20px;
-            }
-
-            .header h1 {
-                font-size: 2.2em;
-            }
-
-            .input-panel {
-                padding: 25px;
-            }
-        }
-    </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>JudicAI 3D | AI Courtroom</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b121c;--glass:rgba(14,22,34,.78);--line:rgba(217,170,74,.35);--text:#eef2f8;--muted:#9fb0c4;--brass:#d9aa4a;--an:#3fb5a4;--pr:#e5625f;--df:#5a8fe0;--jd:#b392f0;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--text);font-family:Inter,system-ui,Arial,sans-serif;font-size:14px;overflow:hidden}
+#c{position:fixed;inset:0;width:100%;height:100%;touch-action:none;cursor:grab;display:block}
+#c:active{cursor:grabbing}
+.glass{background:var(--glass);border:1px solid var(--line);border-radius:14px;backdrop-filter:blur(10px)}
+#top{position:fixed;top:12px;left:50%;transform:translateX(-50%);display:flex;gap:8px;align-items:center;padding:8px 14px;z-index:5;white-space:nowrap}
+#top b{font-family:"Playfair Display",Georgia,serif;font-size:18px;color:var(--brass);margin-right:6px}
+.chip{font-size:12px;font-weight:600;padding:3px 10px;border-radius:99px;border:1px solid var(--line);color:var(--muted)}
+.chip.on{background:var(--brass);color:#1a1205;border-color:var(--brass)}.chip.done{color:var(--text)}
+#panel{position:fixed;left:12px;top:12px;bottom:12px;width:300px;padding:14px;overflow-y:auto;z-index:4}
+#panel h2{margin:44px 0 8px;font-family:"Playfair Display",Georgia,serif;font-size:17px}
+label{display:block;font-size:12px;font-weight:600;margin:9px 0 3px;color:var(--muted)}
+input[type=text],select,textarea{width:100%;background:rgba(255,255,255,.06);color:var(--text);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:8px;font:inherit}
+textarea{min-height:70px;resize:vertical}
+button{font:inherit;font-weight:600;border:1px solid var(--line);background:rgba(255,255,255,.07);color:var(--text);border-radius:8px;padding:8px 10px;cursor:pointer}
+button:hover{border-color:var(--brass)}button:disabled{opacity:.45;cursor:not-allowed}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+.go{background:var(--brass);color:#1a1205;border-color:var(--brass);width:100%;margin-top:8px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
+.cams{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}.cams button{padding:4px 8px;font-size:12px}
+.chk{display:flex;gap:7px;align-items:center;font-size:13px;margin:6px 0;font-weight:500;color:var(--text)}
+#err{display:none;color:var(--pr);margin-top:8px;font-weight:600;font-size:13px}
+.small{font-size:11px;color:var(--muted);margin-top:10px}
+#ev{position:fixed;right:12px;top:12px;width:270px;max-height:60vh;overflow-y:auto;padding:10px;z-index:4;display:none}
+#ev h3{margin:0 0 8px;font-family:"Playfair Display",Georgia,serif;font-size:15px}
+.card{border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:7px 9px;margin-bottom:6px;font-size:12px;animation:in .4s both}
+.card b{display:block}.card i{color:var(--muted);font-style:normal}
+.tg{font-size:10px;font-weight:700;padding:1px 7px;border-radius:99px;border:1px solid;margin-right:4px;display:inline-block;margin-top:4px}
+@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+#sub{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);width:min(820px,calc(100% - 40px));padding:12px 18px;z-index:4;display:none;text-align:center}
+#sub .who{font-weight:700;font-size:13px;margin-bottom:3px}
+#sub .t{font-size:18px;line-height:1.45}
+#verdict{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:min(560px,calc(100% - 30px));padding:24px;z-index:6;display:none;text-align:center;border:2px solid var(--brass)}
+#verdict.show{display:block;animation:stamp .5s cubic-bezier(.2,1.4,.4,1)}
+@keyframes stamp{from{transform:translate(-50%,-50%) scale(1.15);opacity:0}}
+#verdict h3{margin:0;color:var(--muted);font-size:12px;font-weight:600}
+#vt{font-family:"Playfair Display",Georgia,serif;font-size:40px;color:var(--brass);margin:4px 0 8px}
+#verdict ul{text-align:left;margin:8px 0 12px;padding-left:20px;color:var(--muted)}
+#load{position:fixed;inset:0;display:grid;place-items:center;background:var(--bg);z-index:9;font-family:"Playfair Display",Georgia,serif;font-size:22px;color:var(--brass)}
+body.rec #panel,body.rec #top,body.rec #ev,body.rec .recbtn{display:none!important}
+.recbtn{position:fixed;right:12px;bottom:12px;z-index:5;padding:6px 10px;font-size:12px}
+@media (max-width:820px){#panel{width:auto;right:12px;bottom:auto;max-height:44vh}#ev{display:none!important}#top{display:none}}
+@media (prefers-reduced-motion: reduce){.card,#verdict.show{animation:none}}
+</style>
 </head>
 <body>
-    <!-- HEADER -->
-    <div class="header">
-        <div class="container">
-            <h1>⚖️ AI COURTROOM</h1>
-            <p>Intelligent Justice & Legal Analysis System</p>
-        </div>
-    </div>
+<canvas id="c"></canvas>
+<div id="load">Convening the court…</div>
+<div id="top" class="glass"><b>JudicAI</b><span class="chip" data-s="0">Court opens</span><span class="chip" data-s="1">Evidence</span><span class="chip" data-s="2">Debate</span><span class="chip" data-s="3">Verdict</span></div>
 
-    <!-- MAIN CONTAINER -->
-    <div class="container mt-5 mb-5">
-        <!-- INPUT PANEL -->
-        <div class="input-panel">
-            <h2>📋 File Your Case</h2>
-            <div class="row">
-                <div class="col-md-6 mb-4">
-                    <label class="form-label">Case Details *</label>
-                    <textarea class="form-control" id="caseInput" rows="6" placeholder="Describe the case facts, evidence, and charges..."></textarea>
-                </div>
-                <div class="col-md-6 mb-4">
-                    <label class="form-label">Defendant's Statement</label>
-                    <textarea class="form-control" id="defendantInput" rows="6" placeholder="Enter the defendant's defense position..."></textarea>
-                </div>
-            </div>
-            <button class="btn btn-analyze" onclick="analyzeCase()" id="analyzeBtn">
-                <i class="fas fa-gavel"></i> CONVENE COURT
-            </button>
-        </div>
+<aside id="panel" class="glass">
+  <h2>Case file</h2>
+  <label for="title">Case title</label><input id="title" type="text" maxlength="100">
+  <label for="type">Case type</label><select id="type"><option value="criminal">Criminal</option><option value="civil">Civil</option></select>
+  <label for="details">Case details</label><textarea id="details"></textarea>
+  <label for="evid">Evidence (one per line)</label><textarea id="evid"></textarea>
+  <button class="go" id="demo" type="button">▶ Play demo trial</button>
+  <div class="grid"><button id="live" type="button">Live AI trial</button><button id="stop" type="button" disabled>Stop</button></div>
+  <div id="err" role="alert"></div>
+  <label class="chk"><input type="checkbox" id="voice" checked> Voices</label>
+  <label class="chk"><input type="checkbox" id="auto" checked> Auto camera</label>
+  <label>Camera (or drag the scene, scroll to zoom)</label>
+  <div class="cams" id="cams"></div>
+  <p class="small">Educational simulation. Verdicts are AI-generated, not legal advice. The demo uses a scripted fictional case.</p>
+</aside>
 
-        <!-- COURTROOM -->
-        <div class="courtroom">
-            <h2 class="courtroom-title">🏛️ COURT IN SESSION</h2>
+<aside id="ev" class="glass"><h3>Evidence board</h3><div id="evl"></div></aside>
+<div id="sub" class="glass"><div class="who" id="sw"></div><div class="t" id="st"></div></div>
+<div id="verdict" class="glass"><h3>The court’s verdict</h3><p id="vt"></p><div id="vr"></div><ul id="vf"></ul><div id="vm" style="font-weight:600"></div><button id="vx" type="button" style="margin-top:12px">Close</button></div>
+<button class="recbtn glass" id="rec" type="button">Recording mode</button>
 
-            <!-- Empty State -->
-            <div id="emptyState" class="empty-state">
-                <i class="fas fa-scroll" style="font-size: 3em; color: #ddd; margin-bottom: 20px; display: block;"></i>
-                File your case to begin the trial
-            </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+var T=THREE,$=function(i){return document.getElementById(i);};
+var cv=$("c"),R=new T.WebGLRenderer({canvas:cv,antialias:true});
+R.setPixelRatio(Math.min(devicePixelRatio,2));R.shadowMap.enabled=true;R.shadowMap.type=T.PCFSoftShadowMap;
+R.toneMapping=T.ACESFilmicToneMapping;R.toneMappingExposure=1.05;R.outputEncoding=T.sRGBEncoding;
+var S=new T.Scene();S.background=new T.Color(0x0b121c);S.fog=new T.Fog(0x0b121c,26,48);
+var cam=new T.PerspectiveCamera(55,1,.1,80);
+function M(c,r,m,e){var o={color:c,roughness:r==null?.7:r,metalness:m||0};if(e){o.emissive=e;o.emissiveIntensity=1.4;}return new T.MeshStandardMaterial(o);}
+var wood=M(0x5a3320,.55),dwood=M(0x3a2116,.5),plast=M(0xe6dcc6,.95),brass=M(0xc9a24a,.3,.85),carpet=M(0x6b1f2a,.95),paper=M(0xf1ece0,.9);
+function B(w,h,d,m,x,y,z,p,cs){var o=new T.Mesh(new T.BoxGeometry(w,h,d),m);o.position.set(x,y,z);o.castShadow=!!cs;o.receiveShadow=true;(p||S).add(o);return o;}
+function C(rt,rb,h,m,x,y,z,p,seg){var o=new T.Mesh(new T.CylinderGeometry(rt,rb,h,seg||12),m);o.position.set(x,y,z);o.castShadow=false;(p||S).add(o);return o;}
+function lab(txt,w,h,bg,fg,font){var k=document.createElement("canvas");k.width=512;k.height=Math.round(512*h/w);var x=k.getContext("2d");x.fillStyle=bg;x.fillRect(0,0,k.width,k.height);x.fillStyle=fg;x.font=font;x.textAlign="center";x.textBaseline="middle";var ls=txt.split("\n");ls.forEach(function(l,i){x.fillText(l,k.width/2,k.height/2+(i-(ls.length-1)/2)*parseInt(font)*1.25);});var t=new T.CanvasTexture(k);return new T.Mesh(new T.PlaneGeometry(w,h),new T.MeshStandardMaterial({map:t,roughness:.6}));}
 
-            <!-- Court Content -->
-            <div id="courtContent" style="display: none;">
-                <!-- Loading State -->
-                <div id="loadingState" class="loading-state" style="display: none;">
-                    <div class="spinner"></div>
-                    <p style="font-size: 1.2em; color: var(--primary); font-weight: 600;">
-                        <i class="fas fa-hourglass-start"></i> CONVENING COURT...
-                    </p>
-                </div>
+/* room */
+var fl=B(24,.2,28,M(0x4a2c1c,.32,.12),0,-.1,0);
+B(2.6,.02,22,carpet,0,.01,3);
+B(24,.2,28,plast,0,7.9,0);
+for(var i=-9;i<=9;i+=3)B(.35,.5,28,dwood,i,7.6,0);
+B(24,8,.2,plast,0,4,14);B(24,8,.2,plast,0,4,-14);B(.2,8,28,plast,-12,4,0);B(.2,8,28,plast,12,4,0);
+B(24,3,.3,dwood,0,1.5,13.85);B(24,3.4,.3,dwood,0,1.7,-13.85);B(.3,3,28,dwood,-11.85,1.5,0);B(.3,3,28,dwood,11.85,1.5,0);
+B(24,.15,.4,brass,0,3.1,13.8);B(.4,.15,28,brass,-11.8,3.1,0);B(.4,.15,28,brass,11.8,3.1,0);
+/* windows + beams */
+var beamM=new T.MeshBasicMaterial({color:0xffe2a8,transparent:true,opacity:.07,blending:T.AdditiveBlending,depthWrite:false,side:T.DoubleSide});
+[-9,-3,3,9].forEach(function(z){
+  B(.1,3.6,1.8,M(0xbcd4ff,.3,0,0x7fa6e8),-11.9,5,z);B(.2,3.9,.14,dwood,-11.85,5,z-.95);B(.2,3.9,.14,dwood,-11.85,5,z+.95);B(.22,.14,2,dwood,-11.85,6.9,z);
+  var bm=new T.Mesh(new T.PlaneGeometry(2.2,11),beamM);bm.position.set(-6.6,3.6,z);bm.rotation.set(0,Math.PI/2,0);bm.rotation.x=0;bm.rotation.z=-.0;bm.rotation.y=Math.PI/2;bm.rotateOnWorldAxis(new T.Vector3(0,0,1),-.95);S.add(bm);
+});
+/* judge bench, flags, seal */
+B(7.2,1.3,3.2,dwood,0,.65,-11.9);
+B(5.8,.95,.4,wood,0,1.78,-10.4);B(6.2,.1,1.3,dwood,0,2.28,-10.8);B(5.8,.08,.1,brass,0,2.34,-10.2);
+var np=lab("HON. A. JUSTICE",2,.4,"#b08a3a","#1a1205","bold 40px Georgia");np.position.set(0,1.85,-10.19);S.add(np);
+B(1.3,2.1,.22,dwood,0,2.4,-12.6);B(1.5,.2,.4,brass,0,3.5,-12.6);
+var seal=new T.Mesh(new T.CircleGeometry(1.5,48),new T.MeshStandardMaterial({map:(function(){var k=document.createElement("canvas");k.width=k.height=256;var x=k.getContext("2d");x.fillStyle="#c9a24a";x.beginPath();x.arc(128,128,126,0,7);x.fill();x.fillStyle="#7a5a1c";x.beginPath();x.arc(128,128,112,0,7);x.fill();x.fillStyle="#f6e3a8";x.textAlign="center";x.font="64px serif";x.fillText("⚖",128,120);x.font="bold 22px Georgia";x.fillText("SUPERIOR COURT",128,158);x.font="16px Georgia";x.fillText("JUSTICE · LAW · ORDER",128,184);return new T.CanvasTexture(k);})(),roughness:.4,metalness:.5}));
+seal.position.set(0,6,-13.7);S.add(seal);
+[[-5,0x1c3a78],[5,0x9a2430]].forEach(function(f){C(.05,.05,5.4,brass,f[0],2.7,-13.4);B(1.7,1.1,.04,M(f[1],.8),f[0]+(f[0]<0?.9:-.9),4.7,-13.4);});
+/* gavel */
+var gv=new T.Group();gv.position.set(1.4,2.38,-10.6);S.add(gv);
+C(.4,.4,.08,dwood,0,0,0,gv);var gp_=new T.Group();gp_.position.set(.1,.12,0);gv.add(gp_);
+C(.02,.02,.4,wood,.2,0,0,gp_).rotation.z=Math.PI/2;C(.07,.07,.2,dwood,.4,0,0,gp_).rotation.x=Math.PI/2;
+/* furniture */
+B(3.2,.9,1,wood,0,.45,-7.8);B(3,.06,1.1,dwood,0,.92,-7.8);
+B(2.4,.5,1.8,dwood,7,.25,-9.6);B(2.4,.95,.14,wood,7,1.0,-8.7);B(.14,.95,1.8,wood,5.85,1.0,-9.6);
+B(3.4,.85,1.2,wood,-4.5,.43,-5.4);B(3.4,.85,1.2,wood,4.5,.43,-5.4);
+[-1,1].forEach(function(s){B(3.5,.06,1.3,dwood,s*4.5,.88,-5.4);for(var i=0;i<3;i++)B(.5,.03,.34,paper,s*4.5-1+i*.9,.93,-5.3);});
+B(1.8,.8,1.1,wood,-9.4,.4,-6.4);
+[0xd04a4a,0x4a7ad0,0xe8d36a,0x7fd0a0].forEach(function(c,i){B(.3,.14,.22,M(c,.7),-9.9+i*.42,.87,-6.4);});
+function chair(x,z,ry,tall){var g=new T.Group();g.position.set(x,0,z);g.rotation.y=ry;S.add(g);B(.55,.08,.55,dwood,0,.46,0,g);B(.55,tall||.7,.07,dwood,0,.8,-.27,g);[[-.24,-.24],[.24,-.24],[-.24,.24],[.24,.24]].forEach(function(p){B(.05,.44,.05,dwood,p[0],.22,p[1],g);});}
+chair(0,-12.2,0,1.4);chair(0,-8.7,0,.7);chair(-6.1,-3.8,Math.PI);chair(6.1,-3.8,Math.PI);
+/* bar + pews */
+[[-6.9,10.4],[6.9,10.4]].forEach(function(r){B(r[1],.95,.14,wood,r[0],.48,2.2);B(r[1],.07,.22,brass,r[0],.98,2.2);});
+B(.2,1.1,.2,brass,-1.4,.55,2.2);B(.2,1.1,.2,brass,1.4,.55,2.2);
+[4.8,6.8,8.8,10.8].forEach(function(z){[-6.3,6.3].forEach(function(x){B(8,.12,.7,wood,x,.44,z);B(8,.9,.1,wood,x,.95,z+.4);B(.1,1,.8,dwood,x-4,.5,z+.1);B(.1,1,.8,dwood,x+4,.5,z+.1);});});
+/* jury box */
+B(.12,.9,6.6,wood,8.3,.45,-5.1);B(.1,.07,6.6,brass,8.3,.92,-5.1);B(2,.3,6.8,dwood,10.8,.15,-5.1);
+for(var j=0;j<6;j++){chair(9.3,-7.6+j*.95,-Math.PI/2);B(.5,.08,.5,dwood,10.6,.62,-7.6+j*.95);}
+/* people */
+var ppl=[],spk={};
+var skins=[0xf0cfa8,0xe0b48c,0xc68e63,0x9a6b45,0x6e4a30],hairs=[0x1c1410,0x3a2616,0x6b5a40,0x8a8a8a,0x0e0e0e];
+var rs=7;function rnd(){rs=(rs*16807)%2147483647;return rs/2147483647;}
+function person(o){
+  var g=new T.Group(),h=o.seated?.5:.92,sk=M(o.skin||skins[0],.8),cl=M(o.color,.85),hd=new T.Group();
+  g.position.set(o.x,o.y||0,o.z);g.rotation.y=o.ry||0;S.add(g);
+  var t=C(o.robe?.3:.25,o.robe?.46:.29,o.robe?1.05:.64,cl,0,o.robe?h+.18:h+.32,0,g,14);t.castShadow=!!o.cast;
+  if(o.tie)B(.07,.3,.03,M(o.tie,.6),0,h+.42,.27,g);
+  if(o.robe)B(.2,.08,.2,paper,0,h+.66,.2,g);
+  hd.position.set(0,h+.84,0);g.add(hd);
+  var hh=new T.Mesh(new T.SphereGeometry(.17,14,12),sk);hh.castShadow=!!o.cast;hd.add(hh);
+  var hr=new T.Mesh(new T.SphereGeometry(.18,14,10,0,7,0,1.7),M(o.hair||hairs[0],.9));hr.position.y=.02;hr.rotation.x=-.25;hd.add(hr);
+  if(!o.lite){[-.06,.06].forEach(function(x){var e=new T.Mesh(new T.SphereGeometry(.02,6,6),M(0x111111));e.position.set(x,.02,.155);hd.add(e);});}
+  var arms=[];[-1,1].forEach(function(s){var p=new T.Group();p.position.set(s*.32,h+.58,0);g.add(p);var a=C(.06,.055,.5,cl,0,-.25,0,p,8);a.castShadow=!!o.cast;if(!o.lite)new T.Mesh();var hn=new T.Mesh(new T.SphereGeometry(.055,8,8),sk);hn.position.y=-.52;p.add(hn);p.rotation.x=o.seated?-.8:-.1;arms.push(p);});
+  var pc=M(o.pants||0x1a1a22,.9);
+  [-1,1].forEach(function(s){if(o.seated){B(.16,.14,.46,pc,s*.1,h,.22,g);C(.07,.065,h,pc,s*.1,h/2,.44,g,8);}else if(!o.robe){C(.09,.08,h,pc,s*.1,h/2,0,g,8);}});
+  var u={g:g,hd:hd,arms:arms,ph:rnd()*6,role:o.role||"",seated:!!o.seated,base:[o.seated?-.8:-.1],type:o.type||"idle"};
+  ppl.push(u);if(o.role)spk[o.role]=u;return u;}
+var suit=[0x22262e,0x2b3446,0x3a2a2a,0x2a3a34],cols=[0x8a3b3b,0x3b5a8a,0x4a7a5a,0x8a6a3b,0x6a4a8a,0x2f6f7a,0xb0a090,0x7a7a82];
+person({role:"judge",x:0,y:1.3,z:-11.9,seated:true,robe:true,color:0x14141c,skin:skins[1],hair:hairs[3],cast:true});
+person({x:0,z:-8.7,ry:0,seated:true,color:0x6a4a8a,skin:skins[2],hair:hairs[0],type:"type"});
+person({role:"analyzer",x:-8.2,z:-3.9,ry:Math.PI/2.3,color:0xe8eef2,pants:0x2b3446,skin:skins[3],hair:hairs[4],cast:true});
+person({role:"prosecutor",x:-4.5,z:-3.9,ry:Math.PI,color:0x20242c,tie:0xb03030,skin:skins[1],hair:hairs[1],cast:true});
+person({role:"defense",x:4.5,z:-3.9,ry:Math.PI,color:0x24304a,tie:0x3b6bc0,skin:skins[2],hair:hairs[0],cast:true});
+person({x:-2.9,z:-3.9,ry:Math.PI,seated:true,color:0x2a2a34,skin:skins[0],hair:hairs[2]});
+person({x:6.1,z:-3.9,ry:Math.PI,seated:true,color:0x3a2a2a,skin:skins[4],hair:hairs[4]});
+person({x:7,y:.5,z:-9.9,ry:-.5,seated:true,color:0x5a7a8a,skin:skins[1],hair:hairs[3]});
+person({x:5,z:-8.2,ry:-.5,color:0x1e2c44,pants:0x1e2c44,skin:skins[3],hair:hairs[4]});
+for(var q=0;q<6;q++)for(var rw=0;rw<2;rw++){person({x:rw?10.9:9.6,y:rw?.3:0,z:-7.6+q*.95,ry:-Math.PI/2,seated:true,lite:true,color:cols[Math.floor(rnd()*8)],skin:skins[Math.floor(rnd()*5)],hair:hairs[Math.floor(rnd()*5)]});}
+[4.8,6.8,8.8,10.8].forEach(function(z){[-6.3,6.3].forEach(function(x){for(var i=0;i<6;i++){if(rnd()<.34)continue;person({x:x-3.2+i*1.28,z:z,ry:Math.PI,seated:true,lite:true,color:cols[Math.floor(rnd()*8)],skin:skins[Math.floor(rnd()*5)],hair:hairs[Math.floor(rnd()*5)]});}});});
+/* lights */
+S.add(new T.HemisphereLight(0xcfd8e8,0x3a2a20,.55));
+var dl=new T.DirectionalLight(0xaec4ff,.45);dl.position.set(-14,10,2);S.add(dl);
+[-8,0,8].forEach(function(z){var g=new T.Group();g.position.set(0,6.6,z);S.add(g);C(.02,.02,2,brass,0,1,0,g,6);var tr=new T.Mesh(new T.TorusGeometry(.8,.05,8,28),brass);tr.rotation.x=Math.PI/2;g.add(tr);for(var i=0;i<6;i++){var a=i/6*6.283;var b=new T.Mesh(new T.SphereGeometry(.09,8,8),M(0xffe0a0,.4,0,0xffc864));b.position.set(Math.cos(a)*.8,.1,Math.sin(a)*.8);g.add(b);}var pl=new T.PointLight(0xffd9a0,.75,24,1.6);pl.position.set(0,-.2,0);g.add(pl);});
+var sp=new T.SpotLight(0xfff0cf,0,22,.4,.6,1);sp.position.set(0,8,0);sp.castShadow=true;sp.shadow.mapSize.set(1024,1024);S.add(sp);S.add(sp.target);
+/* dust */
+var dg=new T.BufferGeometry(),dp=new Float32Array(360);for(var d=0;d<120;d++){dp[d*3]=-11+rnd()*22;dp[d*3+1]=.5+rnd()*6;dp[d*3+2]=-12+rnd()*24;}dg.setAttribute("position",new T.BufferAttribute(dp,3));
+var dust=new T.Points(dg,new T.PointsMaterial({color:0xfff0cf,size:.05,transparent:true,opacity:.5,depthWrite:false}));S.add(dust);
 
-                <!-- Trial Display -->
-                <div id="trialDisplay" style="display: none;">
-                    <div class="agents-grid">
-                        <!-- EVIDENCE -->
-                        <div class="agent-card evidence-card">
-                            <span class="agent-icon">🔬</span>
-                            <div class="agent-title">EVIDENCE</div>
-                            <div class="speech-box" id="evidenceSpeech"></div>
-                        </div>
+/* camera */
+var SH={wide:[[0,5,13],[0,2,-6]],judge:[[0,2.9,-4.8],[0,2.5,-11.9]],prosecutor:[[-2.4,2,-7.4],[-4.5,1.55,-3.9]],defense:[[2.4,2,-7.4],[4.5,1.55,-3.9]],analyzer:[[-5.4,2.1,-1.8],[-8.2,1.5,-3.9]],jury:[[3,3,-0.5],[10,1.4,-5]],gallery:[[0,3.4,1.2],[0,1.2,9]],verdict:[[0,2.8,-6.6],[0,2.6,-11.9]]};
+var gp=new T.Vector3(),gt=new T.Vector3(),pause=0;
+function shot(n,force){if(!force&&performance.now()<pause)return;var s=SH[n];gp.set(s[0][0],s[0][1],s[0][2]);gt.set(s[1][0],s[1][1],s[1][2]);}
+shot("wide",true);cam.position.set(0,7.5,15);var ct=new T.Vector3(0,2,-6);
+var cb=$("cams");["wide","judge","prosecutor","defense","analyzer","jury","gallery"].forEach(function(n){var b=document.createElement("button");b.type="button";b.textContent=n[0].toUpperCase()+n.slice(1);b.onclick=function(){pause=0;shot(n,true);if(n!=="wide")pause=performance.now()+8000;};cb.appendChild(b);});
+var dr=null;cv.addEventListener("pointerdown",function(e){dr={x:e.clientX,y:e.clientY};cv.setPointerCapture(e.pointerId);});
+cv.addEventListener("pointermove",function(e){if(!dr)return;var dx=e.clientX-dr.x,dy=e.clientY-dr.y;dr={x:e.clientX,y:e.clientY};pause=performance.now()+8000;var o=gp.clone().sub(gt),s=new T.Spherical().setFromVector3(o);s.theta-=dx*.006;s.phi=Math.min(1.5,Math.max(.25,s.phi-dy*.005));o.setFromSpherical(s);gp.copy(gt).add(o);if(gp.y<.7)gp.y=.7;});
+cv.addEventListener("pointerup",function(){dr=null;});
+cv.addEventListener("wheel",function(e){e.preventDefault();pause=performance.now()+8000;var o=gp.clone().sub(gt),l=Math.min(30,Math.max(2.5,o.length()*(1+e.deltaY*.001)));o.setLength(l);gp.copy(gt).add(o);},{passive:false});
+function size(){R.setSize(innerWidth,innerHeight,false);cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix();}addEventListener("resize",size);size();
 
-                        <!-- PROSECUTOR -->
-                        <div class="agent-card prosecutor-card">
-                            <span class="agent-icon">🔨</span>
-                            <div class="agent-title">PROSECUTOR</div>
-                            <div class="speech-box" id="prosecutorSpeech"></div>
-                        </div>
+/* animation */
+var cur=null,gT=-1e9,clock=new T.Clock();
+function loop(){requestAnimationFrame(loop);var t=clock.getElapsedTime(),now=performance.now();
+  ppl.forEach(function(u){var sp_=u.role&&u.role===cur;
+    u.hd.rotation.y=sp_?Math.sin(t*.8)*.12:Math.sin(t*.4+u.ph)*(u.seated&&!u.role?.28:.08);
+    u.hd.rotation.x=sp_?Math.sin(t*8)*.05:0;
+    if(sp_&&!u.seated){u.arms[1].rotation.x=-.9+Math.sin(t*3.1)*.35;u.arms[0].rotation.x=-.6+Math.sin(t*2.5+1)*.25;u.arms[1].rotation.z=-.15;}
+    else if(u.type==="type"){u.arms[0].rotation.x=-1.1+Math.sin(t*17)*.08;u.arms[1].rotation.x=-1.1+Math.sin(t*17+2)*.08;}
+    else if(sp_){u.arms[1].rotation.x=-1+Math.sin(t*3)*.2;}
+    else{u.arms.forEach(function(a){a.rotation.x=u.base[0];a.rotation.z=0;});}
+  });
+  var k=(now-gT)/450;gp_.rotation.z=k<1?Math.sin(k*Math.PI)*-.9:0;
+  var pos=dust.geometry.attributes.position;for(var i=0;i<120;i++){pos.array[i*3+1]+=Math.sin(t+i)*.0015;}pos.needsUpdate=true;
+  cam.position.lerp(gp,.04);ct.lerp(gt,.05);cam.lookAt(ct);
+  var tgt=cur&&spk[cur]?spk[cur].g.position:null;
+  if(tgt){sp.position.set(tgt.x,8,tgt.z+1.6);sp.target.position.set(tgt.x,tgt.y+1.2,tgt.z);}
+  sp.intensity+=((cur?2.6:0)-sp.intensity)*.08;
+  R.render(S,cam);}
+$("load").style.display="none";loop();
 
-                        <!-- DEFENSE -->
-                        <div class="agent-card defense-card">
-                            <span class="agent-icon">🛡️</span>
-                            <div class="agent-title">DEFENSE</div>
-                            <div class="speech-box" id="defenseSpeech"></div>
-                        </div>
-
-                        <!-- JUDGE -->
-                        <div class="agent-card judge-card">
-                            <span class="agent-icon">👨‍⚖️</span>
-                            <div class="agent-title">JUDGE</div>
-                            <div class="speech-box" id="judgeSpeech"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-    <script>
-        async function analyzeCase() {
-            const caseInput = document.getElementById('caseInput').value;
-            const defendantInput = document.getElementById('defendantInput').value;
-
-            if (!caseInput.trim()) {
-                alert('Please file case details');
-                return;
-            }
-
-            const btn = document.getElementById('analyzeBtn');
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-hourglass-start"></i> COURT IN SESSION...';
-
-            document.getElementById('emptyState').style.display = 'none';
-            document.getElementById('courtContent').style.display = 'block';
-            document.getElementById('loadingState').style.display = 'block';
-            document.getElementById('trialDisplay').style.display = 'none';
-
-            try {
-                const response = await fetch('http://localhost:5000/analyze', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ case: caseInput, defendant: defendantInput })
-                });
-
-                if (!response.ok) throw new Error('Backend error');
-                const data = await response.json();
-
-                document.getElementById('loadingState').style.display = 'none';
-                document.getElementById('trialDisplay').style.display = 'block';
-
-                // Sequential speech - SHOW FULL RESPONSES
-                setTimeout(() => populateSpeech('evidenceSpeech', data.evidence), 300);
-                setTimeout(() => populateSpeech('prosecutorSpeech', data.prosecution), 1200);
-                setTimeout(() => populateSpeech('defenseSpeech', data.defense), 2100);
-                setTimeout(() => populateSpeech('judgeSpeech', data.verdict), 3000);
-
-            } catch (error) {
-                alert('Error: ' + error.message);
-                document.getElementById('loadingState').style.display = 'none';
-                document.getElementById('emptyState').style.display = 'block';
-            }
-
-            btn.disabled = false;
-            btn.innerHTML = '<i class="fas fa-gavel"></i> CONVENE COURT';
-        }
-
-        function populateSpeech(elementId, text) {
-            const el = document.getElementById(elementId);
-            // INCREASED to 1200 characters instead of 450
-            el.textContent = text.substring(0, 1200) + (text.length > 1200 ? '...' : '');
-            el.style.opacity = '1';
-        }
-    </script>
+/* ---- trial logic ---- */
+var NAMES={analyzer:"Evidence Analyzer",prosecutor:"Prosecutor",defense:"Defense counsel",judge:"Judge",bailiff:"Bailiff"},COL={analyzer:"#3fb5a4",prosecutor:"#e5625f",defense:"#5a8fe0",judge:"#b392f0",bailiff:"#9fb0c4"};
+var sampleFn=null,aborted=false,history=[];
+try{if(typeof claude!=="undefined"&&claude&&claude.use){claude.use("sample").then(function(s){sampleFn=s;},function(){});}}catch(e){}
+function err(m){var e=$("err");e.textContent=m;e.style.display=m?"block":"none";}
+function step(n){document.querySelectorAll(".chip").forEach(function(c){var s=+c.dataset.s;c.classList.toggle("on",s===n);c.classList.toggle("done",s<n);});}
+function wait(ms){return new Promise(function(r){setTimeout(r,ms);});}
+var voices=[];function lv(){voices=(speechSynthesis.getVoices()||[]).filter(function(v){return /^en/i.test(v.lang);});}
+if("speechSynthesis" in window){lv();speechSynthesis.onvoiceschanged=lv;}
+var VP={judge:[.65,.9,0],prosecutor:[.95,1,1],defense:[1.2,1,2],analyzer:[1.05,1.02,3],bailiff:[.8,1,4]};
+function say(role,text){return new Promise(function(res){
+  if(aborted)return res();cur=SH[role]||role==="judge"||spk[role]?role:null;if(role==="bailiff")cur=null;
+  var sw=$("sw");$("sub").style.display="block";sw.textContent=NAMES[role];sw.style.color=COL[role];
+  var st=$("st"),i=0,dur=Math.max(2200,text.length*48),iv=setInterval(function(){i=Math.min(text.length,i+Math.ceil(text.length/(dur/30)));st.textContent=text.slice(0,i);if(i>=text.length)clearInterval(iv);},30);
+  var done=false,fin=function(){if(done)return;done=true;clearInterval(iv);st.textContent=text;setTimeout(res,500);};
+  if($("voice").checked&&"speechSynthesis" in window){try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(text),p=VP[role];u.pitch=p[0];u.rate=p[1];if(voices.length)u.voice=voices[p[2]%voices.length];u.onend=function(){setTimeout(fin,200);};u.onerror=fin;speechSynthesis.speak(u);setTimeout(fin,dur*2.4+3000);}catch(e){setTimeout(fin,dur+800);}}
+  else setTimeout(fin,dur+800);
+});}
+function board(ev){$("ev").style.display="block";var l=$("evl");l.innerHTML="";ev.items.forEach(function(it,i){var d=document.createElement("div");d.className="card";d.style.animationDelay=i*.25+"s";var b=document.createElement("b");b.textContent=it.name;var n=document.createElement("i");n.textContent=it.note;d.appendChild(b);d.appendChild(n);var br=document.createElement("div");
+  function tg(x,c){var s=document.createElement("span");s.className="tg";s.textContent=x;s.style.color=c;br.appendChild(s);}
+  tg(it.admit?"Admitted":"Excluded",it.admit?"#3fb5a4":"#9fb0c4");tg(it.favors==="prosecution"?"Favors prosecution":it.favors==="defense"?"Favors defense":"Neutral",it.favors==="prosecution"?"#e5625f":it.favors==="defense"?"#5a8fe0":"#9fb0c4");tg(it.strength,"#d9aa4a");
+  d.appendChild(br);l.appendChild(d);});}
+var DEMO={
+ ev:{summary:"Four of five items are admitted. The key-card log is the strongest link to the accused. The coworker’s remark about overtime is excluded as speculative.",items:[
+  {name:"CCTV: hooded figure, 2:14 AM",favors:"prosecution",strength:"weak",admit:true,note:"Face not visible. Shows someone was there, not who."},
+  {name:"Key-card log, cage opened 1:58 AM",favors:"prosecution",strength:"strong",admit:true,note:"Rhodes’s card was used."},
+  {name:"Phone location data",favors:"neutral",strength:"moderate",admit:true,note:"Confirms presence in the building, not conduct."},
+  {name:"Pawn receipt, matching serials",favors:"prosecution",strength:"moderate",admit:true,note:"Signed by an unidentified man."},
+  {name:"Coworker: overtime complaints",favors:"prosecution",strength:"weak",admit:false,note:"Speculative motive. Prejudicial."}]},
+ turns:{
+  "prosecutor|Opening statement":"Your Honor, on the night of March third, twelve laptops vanished from a locked cage. The key-card log shows Daniel Rhodes’s own card opened that cage at 1:58 AM. Minutes later, a figure in a company hoodie appears on camera, and the stolen serial numbers surface at a pawn shop. Access, timing, and opportunity all point to one man.",
+  "defense|Opening statement":"Your Honor, the prosecution has a card swipe and a blurry hoodie. Mr. Rhodes is a supervisor, and opening that cage is part of his job. His phone proves he never left the building, and the camera never shows his face. The pawn receipt is signed by a stranger. Suspicion is not proof beyond reasonable doubt.",
+  "prosecutor|Rebuttal":"The defense calls it routine, yet only a handful of people hold cage access, and only one card opened it at 1:58. Whoever wore that hoodie knew the layout and the schedule. Coincidence cannot explain access, timing, and matching serial numbers all at once.",
+  "defense|Rebuttal":"Counsel says only a few hold access, but a card can be shared, cloned, or borrowed. The log records a card, not a person. No witness places Mr. Rhodes with a laptop, and no money trail ties him to the pawn shop. The state has built a story and left out the proof."},
+ v:{verdict:"Not guilty",reasoning:"The key-card entry shows access, but access alone is not theft. The camera does not identify the defendant, the pawn receipt names an unknown seller, and the phone data places Mr. Rhodes in the building, as expected on a night shift. Together the evidence raises suspicion without proving guilt beyond a reasonable doubt.",key_factors:["Card log shows access, not theft","No identification on video or receipt","Reasonable doubt remains"],remedy:"None"}};
+function cs(){return "CASE: "+$("title").value.trim()+" ("+$("type").value+")\nDETAILS: "+$("details").value.trim()+"\nEVIDENCE: "+($("evid").value.trim()||"(none listed)");}
+var BASE="You are an agent in JudicAI, an educational courtroom simulation (fictional, not legal advice). Stay in character, plain prose, no markdown.\n";
+function adm(ev){return ev.items.filter(function(i){return i.admit;}).map(function(i){return "- "+i.name+" ["+i.strength+", favors "+i.favors+"]";}).join("\n");}
+function tr(){return history.map(function(h){return h.w+": "+h.t;}).join("\n\n")||"(none)";}
+var LIVE={
+ analyze:function(){return sampleFn.json(BASE+cs()+"\nYou are the Evidence Analyzer. If no evidence is listed, infer 3-5 likely items. Decide which are admitted. JSON only: {\"summary\":\"2 sentences\",\"items\":[{\"name\":\"\",\"favors\":\"prosecution|defense|neutral\",\"strength\":\"strong|moderate|weak\",\"admit\":true,\"note\":\"short reason\"}]}",{cache:false});},
+ turn:function(role,lab,ev){var crim=$("type").value==="criminal";var side=role==="prosecutor"?(crim?"the Prosecutor arguing guilt":"plaintiff’s counsel arguing liability"):(crim?"the Defense counsel arguing not guilty":"defendant’s counsel arguing no liability");
+  return sampleFn([{role:"user",content:BASE+cs()+"\nADMITTED EVIDENCE:\n"+adm(ev)+"\nTRANSCRIPT:\n"+tr()+"\nYou are "+side+". Give your "+lab.toLowerCase()+" in 60-80 words, first person, citing admitted evidence by name and answering the other side."}],{cache:false}).then(function(r){return r.text.trim();});},
+ judge:function(ev){var crim=$("type").value==="criminal";return sampleFn.json(BASE+cs()+"\nADMITTED:\n"+adm(ev)+"\nTRANSCRIPT:\n"+tr()+"\nYou are the Judge. JSON only: {\"verdict\":\""+(crim?"Guilty|Not guilty|Insufficient evidence":"Liable|Not liable|Insufficient evidence")+"\",\"reasoning\":\"80-100 words\",\"key_factors\":[\"3 short\"],\"remedy\":\"sentence or relief, or None\"}",{cache:false});}};
+function norm(ev){ev.items=(ev.items||[]).slice(0,7).map(function(i){return{name:String(i.name||"Evidence"),favors:String(i.favors||"neutral"),strength:String(i.strength||"moderate"),admit:i.admit!==false,note:String(i.note||"")};});return ev;}
+async function trial(live){
+  if(live&&!sampleFn){err("Live AI needs this page opened inside Claude. Use the demo instead.");return;}
+  if(live&&(!$("title").value.trim()||!$("details").value.trim())){err("Add a case title and details first.");return;}
+  err("");aborted=false;history=[];$("demo").disabled=$("live").disabled=true;$("stop").disabled=false;$("verdict").className="glass";$("ev").style.display="none";
+  try{
+    step(0);shot("wide");await wait(900);
+    await say("bailiff","All rise. The Superior Court is now in session, the Honorable A. Justice presiding.");
+    gT=performance.now();if(!aborted){shot("judge");}
+    await say("judge","Please be seated. We will begin with the evidence.");
+    step(1);shot("analyzer");
+    var ev=norm(live?await LIVE.analyze():DEMO.ev);if(aborted)throw 0;
+    board(ev);var sm=live?"I reviewed the file. "+ev.items.filter(function(i){return i.admit;}).length+" of "+ev.items.length+" items are admitted.":DEMO.ev.summary;
+    if(live&&ev.summary)sm=String(ev.summary);
+    history.push({w:"Evidence Analyzer",t:sm});await say("analyzer",sm);
+    step(2);var rounds=[["prosecutor","Opening statement"],["defense","Opening statement"],["prosecutor","Rebuttal"],["defense","Rebuttal"]];
+    for(var k=0;k<rounds.length;k++){var r=rounds[k];if(aborted)throw 0;shot(r[0]);
+      var tx=live?await LIVE.turn(r[0],r[1],ev):DEMO.turns[r[0]+"|"+r[1]];if(aborted)throw 0;
+      history.push({w:NAMES[r[0]],t:tx});await say(r[0],tx);}
+    step(3);cur="judge";shot("judge");$("sub").style.display="none";await wait(1800);
+    var v=live?await LIVE.judge(ev):DEMO.v;if(aborted)throw 0;
+    shot("verdict");await say("judge","After careful consideration, this court finds: "+v.verdict+". "+String(v.reasoning||""));
+    gT=performance.now();setTimeout(function(){gT=performance.now();},700);
+    $("vt").textContent=String(v.verdict);$("vr").textContent=String(v.reasoning||"");var ul=$("vf");ul.innerHTML="";(v.key_factors||[]).slice(0,4).forEach(function(f){var li=document.createElement("li");li.textContent=String(f);ul.appendChild(li);});
+    $("vm").textContent=v.remedy&&String(v.remedy)!=="None"?String(v.remedy):"";$("verdict").className="glass show";
+  }catch(e){if(e&&e.code==="not_granted")err("Permission for the AI agents was declined.");else if(e&&e.code==="rate_limited")err("Too many requests. Try again in a minute.");else if(e)err((e&&e.message)||"Something went wrong.");}
+  finally{cur=null;$("demo").disabled=$("live").disabled=false;$("stop").disabled=true;if("speechSynthesis" in window)speechSynthesis.cancel();setTimeout(function(){if(!$("verdict").classList.contains("show"))$("sub").style.display="none";shot("wide");},600);}
+}
+$("demo").onclick=function(){$("title").value="State v. Daniel Rhodes";$("type").value="criminal";$("details").value="Daniel Rhodes, a night-shift supervisor at Harbor Logistics, is accused of stealing 12 laptops (about $14,000) from the warehouse on March 3rd. He says he was on break and that several employees have keys to the storage cage.";$("evid").value="CCTV of a hooded person near the cage at 2:14 AM (face not visible)\nKey-card log: Rhodes’s card opened the cage at 1:58 AM\nCoworker statement about unpaid overtime complaints\nPawn shop receipt with matching serial numbers, signed by an unidentified man\nPhone location data placing Rhodes in the building all night";trial(false);};
+$("live").onclick=function(){trial(true);};
+$("stop").onclick=function(){aborted=true;if("speechSynthesis" in window)speechSynthesis.cancel();};
+$("vx").onclick=function(){$("verdict").className="glass";};
+$("rec").onclick=function(){document.body.classList.add("rec");};
+addEventListener("keydown",function(e){if(e.key==="Escape")document.body.classList.remove("rec");});
+$("auto").onchange=function(){pause=$("auto").checked?0:1e15;};
+})();
+</script>
 </body>
 </html>
